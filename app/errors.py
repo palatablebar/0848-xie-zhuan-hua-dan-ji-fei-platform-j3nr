@@ -18,6 +18,11 @@ MESSAGES = {
     "GATE_BLOCKED": "存在阻断项，不能签发",
     "NOT_APPROVED": "批次尚未签发",
     "BAD_REQUEST": "请求内容不完整",
+    "REFUND_CLAIM_UNKNOWN": "退款对账中没有该话单号",
+    "REFUND_BAD_AMOUNT": "补证时长必须是正整数秒",
+    "REFUND_EVIDENCE_REQUIRED": "补证必须注明证据",
+    "REFUND_ATTRIBUTION": "补证归属不在该话单号的版本范围内",
+    "REFUND_NOT_PENDING": "该话单号没有待补证的可退时长",
 }
 
 

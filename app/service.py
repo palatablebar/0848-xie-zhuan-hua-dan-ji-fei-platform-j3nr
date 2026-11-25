@@ -8,6 +8,7 @@ from app.domain.decision import decide_rows
 from app.domain.prepare import prepare_rows
 from app.intake.service import load
 from app.reconcile.ledger import build_ledger
+from app.refund.engine import apply_entries, build_base
 
 
 def jsonable(value):
@@ -26,11 +27,13 @@ def _stage(name):
     return SPEC["stages"].index(name) + 1
 
 
-def pipeline(profile="dirty", path=None, upto="证据交付"):
+def pipeline(profile="dirty", path=None, upto="证据交付", refund_entries=None):
     intake = load(profile, path)
     prepared, prepare_issues = [], []
     results = []
     ledger = None
+    refund = None
+    refund_base = None
     if _stage(upto) >= 2:
         prepared, prepare_issues = prepare_rows(intake["rows"])
     if _stage(upto) >= 3:
@@ -39,6 +42,8 @@ def pipeline(profile="dirty", path=None, upto="证据交付"):
         results = decide_rows(results)
     if _stage(upto) >= 5:
         ledger = build_ledger(intake, prepared, prepare_issues, results)
+        refund_base = build_base(intake, prepared)
+        refund = apply_entries(refund_base, refund_entries or [])
     intake["counts"]["prepared"] = len(prepared)
     intake["counts"]["computed"] = len(results)
     issues = intake["issues"] + prepare_issues
@@ -73,6 +78,8 @@ def pipeline(profile="dirty", path=None, upto="证据交付"):
         "chart": chart,
         "summary": summary,
         "ledger": ledger,
+        "refund": refund,
+        "refund_base": refund_base,
         "stages": [{"id": "intake", "name": SPEC["stages"][0]},
                    {"id": "prepare", "name": SPEC["stages"][1]},
                    {"id": "calculate", "name": SPEC["stages"][2]},

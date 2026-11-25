@@ -77,3 +77,20 @@ def test_conflicting_duplicate_is_isolated(tmp_path):
     data = load("clean", str(make_file(tmp_path, [first, second], name="conflict.csv")))
     assert data["counts"]["accepted"] == 0
     assert any(issue["code"] == "CONFLICT_DUPLICATE" for issue in data["issues"])
+
+
+def test_conflicting_duplicate_versions_are_kept_for_refund(tmp_path):
+    first = row()
+    second = row()
+    second["charged_seconds"] = "999999"
+    data = load("clean", str(make_file(tmp_path, [first, second], name="conflict.csv")))
+    assert data["counts"]["accepted"] == 0
+    assert len(data["conflicts"]) == 1
+    assert data["conflicts"][0]["key"] == first[SPEC["key"]]
+    assert len(data["conflicts"][0]["rows"]) == 2
+
+
+def test_dirty_sample_keeps_conflict_group():
+    data = load("dirty")
+    assert data["conflicts"]
+    assert any(len(group["rows"]) == 2 for group in data["conflicts"])

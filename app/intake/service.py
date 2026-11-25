@@ -49,6 +49,7 @@ def load(profile: str, path: str | None = None):
     for row in valid:
         grouped.setdefault(row[SPEC["key"]], []).append(row)
     accepted = []
+    conflicts = []
     for key, rows in grouped.items():
         signatures = {tuple(row[column] for column in SPEC["columns"]) for row in rows}
         if len(signatures) == 1:
@@ -59,8 +60,9 @@ def load(profile: str, path: str | None = None):
                 issues.append({"line": row["_line"], "key": key, "code": "EXACT_DUPLICATE"})
         else:
             counts["isolated"] += len(rows)
+            conflicts.append({"key": key, "rows": rows})
             for row in rows:
                 issues.append({"line": row["_line"], "key": key, "code": "CONFLICT_DUPLICATE"})
     accepted.sort(key=lambda row: row["_line"])
     return {"profile": profile, "path": sample, "sha256": __import__("hashlib").sha256(raw).hexdigest(),
-            "rows": accepted, "issues": issues, "counts": counts}
+            "rows": accepted, "conflicts": conflicts, "issues": issues, "counts": counts}

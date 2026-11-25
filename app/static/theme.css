@@ -102,6 +102,16 @@
 .p0848 .review { display: grid; gap: 8px; }
 .p0848 .review textarea { width: 100%; min-height: 62px; resize: vertical; }
 .p0848 .review-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.p0848 .refund { display: grid; gap: 8px; }
+.p0848 .refund .table-wrap { max-height: 240px; }
+.p0848 .refund td small { color: var(--muted); }
+.p0848 .refund-form { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; margin-top:6px; }
+.p0848 .refund-form label { display:grid; gap:2px; font-size:11px; color:var(--muted); }
+.p0848 .refund-form input, .p0848 .refund-form select { padding:.3em .45em; }
+.p0848 .refund-form .wide { grid-column: span 2; }
+.p0848 .refund-form button { grid-column: span 4; justify-self:start; }
+.p0848 .refund-status-PENDING { color: var(--danger); }
+.p0848 .refund-status-CONFIRMED { color: var(--accent); }
 .p0848 .statusbar {
   display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
   padding: 9px calc(var(--pad) * 1.25); border-top: 1px solid var(--line); color: var(--muted); font-size: 12px;
@@ -122,6 +132,9 @@
   .p0848 #stage-nav button { white-space:nowrap; border-left:0; border-bottom:2px solid transparent; }
   .p0848 #stage-nav button[aria-pressed="true"] { border-left:0; border-bottom-color:var(--accent); }
   .p0848 .kpis { grid-template-columns:1fr 1fr; }
+  .p0848 .refund-form { grid-template-columns:1fr 1fr; }
+  .p0848 .refund-form .wide { grid-column: span 2; }
+  .p0848 .refund-form button { grid-column: span 2; }
 }
 @media print {
   .p0848 .rail, .p0848 .tools, .p0848 .review, .p0848 .statusbar { display:none !important; }

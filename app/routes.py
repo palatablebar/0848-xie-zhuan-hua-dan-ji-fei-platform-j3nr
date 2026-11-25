@@ -5,6 +5,8 @@ from app.config import SAMPLES
 from app.errors import DomainIssue
 from app.evidence.render import render
 from app.review.service import approve, create_run, serialize
+from app.refund.engine import REASONS as REFUND_REASONS
+from app.refund.service import submit as submit_refund
 from app.service import pipeline
 
 
@@ -25,7 +27,8 @@ def catalog():
                        ["intake", "prepare", "calculate", "decision", "reconcile", "review", "evidence"],
                        SPEC["stages"])],
                    chart=SPEC["chart"], result_columns=SPEC["result_columns"],
-                   columns=SPEC["columns"], samples=["dirty", "clean"])
+                   columns=SPEC["columns"], samples=["dirty", "clean"],
+                   refund_reasons=REFUND_REASONS)
 
 
 @api.post("/api/stages/<stage_id>")
@@ -35,7 +38,9 @@ def stage(stage_id):
     data = request.get_json(silent=True) or {}
     profile = data.get("profile", "dirty")
     upto = SPEC["stages"][STAGE_INDEX[stage_id] - 1]
-    return jsonify(pipeline(profile, upto=upto))
+    payload = pipeline(profile, upto=upto)
+    payload.pop("refund_base", None)
+    return jsonify(payload)
 
 
 @api.post("/api/runs")
@@ -48,10 +53,18 @@ def create():
 
 @api.get("/api/runs/<run_id>")
 def get_run(run_id):
-    run = serialize(store().get(run_id))
+    run = serialize(store().get(run_id), store())
     if not run:
         raise DomainIssue("RUN_NOT_FOUND", 404)
     return jsonify(run)
+
+
+@api.post("/api/runs/<run_id>/refund")
+def refund_entry(run_id):
+    data = request.get_json(silent=True) or {}
+    if not data.get("call_id"):
+        raise DomainIssue("BAD_REQUEST")
+    return jsonify(submit_refund(store(), run_id, data))
 
 
 @api.post("/api/runs/<run_id>/review")
@@ -64,7 +77,7 @@ def review(run_id):
 
 @api.get("/api/runs/<run_id>/evidence")
 def evidence(run_id):
-    run = serialize(store().get(run_id))
+    run = serialize(store().get(run_id), store())
     return jsonify(render(run))
 
 

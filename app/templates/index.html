@@ -23,6 +23,24 @@
       <div class="panel-head"><h2>异常与隔离</h2><span class="hint" id="issue-count">--</span></div>
       <ul class="issues" id="issue-list"></ul>
     </article>
+    <article class="panel" id="panel-refund">
+      <div class="panel-head"><h2>退款对账</h2><span class="hint" id="refund-summary">--</span></div>
+      <div class="refund">
+        <div class="ledger" id="refund-metrics"></div>
+        <div class="table-wrap">
+          <table><thead id="refund-head"></thead><tbody id="refund-body"></tbody></table>
+        </div>
+        <form id="refund-form" class="refund-form" autocomplete="off">
+          <label>话单号 <input id="refund-call" name="call_id" required></label>
+          <label>补证时长(秒) <input id="refund-seconds" name="seconds" type="number" min="1" step="1" required></label>
+          <label>号码 <input id="refund-subscriber" name="subscriber"></label>
+          <label>方向 <select id="refund-direction" name="direction"><option value="OUT">OUT</option><option value="IN">IN</option></select></label>
+          <label class="wide">证据 <input id="refund-evidence" name="evidence" placeholder="工单号或凭证编号" required></label>
+          <label class="wide">备注 <input id="refund-note" name="note"></label>
+          <button id="refund-submit" type="submit" disabled>补证入账</button>
+        </form>
+      </div>
+    </article>
     <article class="panel" id="panel-ledger">
       <div class="panel-head"><h2>运行对账</h2></div>
       <div class="ledger" id="ledger-list"></div>

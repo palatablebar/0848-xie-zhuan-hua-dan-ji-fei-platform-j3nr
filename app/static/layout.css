@@ -5,8 +5,8 @@
 .p0848 .toolbar select,.p0848 .toolbar button{color:var(--ink)}
 .p0848 .toolbar .actor,.p0848 .toolbar .rule-chip{color:#c7dfcd}
 .p0848 .metric{min-height:64px;border:0;border-bottom:2px solid var(--accent);background:transparent}
-.p0848 .board{grid-template-columns:minmax(245px,1fr) minmax(0,2fr);grid-template-areas:"chart table" "chart issues" "ledger review"}
-.p0848 #panel-table{grid-area:table}.p0848 #panel-chart{grid-area:chart}.p0848 #panel-issues{grid-area:issues}.p0848 #panel-ledger{grid-area:ledger}.p0848 #panel-review{grid-area:review}
+.p0848 .board{grid-template-columns:minmax(245px,1fr) minmax(0,2fr);grid-template-areas:"chart table" "chart issues" "chart refund" "ledger review"}
+.p0848 #panel-table{grid-area:table}.p0848 #panel-chart{grid-area:chart}.p0848 #panel-issues{grid-area:issues}.p0848 #panel-refund{grid-area:refund}.p0848 #panel-ledger{grid-area:ledger}.p0848 #panel-review{grid-area:review}
 .p0848 .panel{border:0;border-top:1px solid var(--ink);border-radius:0}.p0848 tbody tr:nth-child(even){background:var(--soft)}
 .p0848 .verdict{border:1px solid currentColor;padding:2px 5px}
 
